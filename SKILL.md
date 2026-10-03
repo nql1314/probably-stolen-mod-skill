@@ -1,11 +1,19 @@
 ---
 name: probably-stolen-mod-skill
-description: 在已准备的 Probably Stolen 游戏环境中创建、维护或排查 MelonLoader 插件或游戏内置 ModLoader 内容，涉及游戏接口、补丁、内容、界面、配置及存档时使用；不用于百科条目写作。
+description: 为 Probably Stolen 内容 Mod 做玩法设计、技术可行性评审、开发与故障排查，支持 MelonLoader、Nicokobo Forge 接入和游戏内置 ModLoader；百科写作与 Forge 框架改造使用各自的技能。
 ---
 
 # Probably Stolen Mod 开发
 
-以本次任务实际使用的游戏构建和加载方式为准。MelonLoader 插件与游戏内置 ModLoader 内容包的资源发现、加载时机和日志不同；先确认实际产物走哪条路径。再确认游戏提供什么接口、何时提供，选择改动最小的接入点。编译通过、补丁声明存在、运行时安装成功和游戏内效果成立是四种不同证据，交付时分别说明。
+以本次任务实际使用的游戏构建和加载方式为准。MelonLoader 插件与游戏内置 ModLoader 内容包的资源发现、加载时机和日志不同；先确认实际产物走哪条路径。基于 Nicokobo Forge 的内容 Mod 还要核对框架公共契约、注册时机和实际能力。编译、安装、加载、玩法效果和保存重载分别需要证据。
+
+## 先确定本次工作
+
+- 设计或可行性评审：保留用户给定的名称、ID、中文措辞和玩法规则，结合当前接口给出实现路径；分清已核对的能力、方案假设和待运行验证项。规划请求只交付相应方案。
+- 开发或修复：先读工作区约定、相关设计和现有实现，保留未提交改动。用户最新修正优先于旧计划；同步实际计算、声明、检查、文案和发布文档，清理已经被替代的规则。
+- Forge 接入：读取 [Forge 接入](scenarios/forge-integration.md)，复用已有公共 API。需要改框架本身时再使用当前环境的 `nicokobo-forge` 技能或框架仓库约定；内容 Mod 持有具体玩法、配方与资源。
+- “没生效”或运行异常：先按 [构建与生效排查](scenarios/build-and-verification.md) 确认当前产物和故障发生的阶段，再读对应场景；已有日志只证明记录中的进程与产物。
+- 普通开发、修复、编译和一般测试不自动启动游戏或调用原生测试技能。各场景的“验证”列出验收路径，实际执行范围由本次请求决定；用户明确要求执行原生测试时按 [原生测试触发规则](scenarios/build-and-verification.md#原生测试触发规则) 处理。
 
 ## 按需求读取场景指南
 
@@ -13,6 +21,7 @@ description: 在已准备的 Probably Stolen 游戏环境中创建、维护或�
 
 | 需求 | 读取 |
 | --- | --- |
+| 接入 Forge 注册、生命周期与公共能力，处理框架和内容侧分工 | [scenarios/forge-integration.md](scenarios/forge-integration.md) |
 | 新增开局 Perk、调整点数/数量、互斥、图标和不同效果 | [scenarios/starting-perks.md](scenarios/starting-perks.md) |
 | 添加食物、模块、容器、机器等物品，处理获得途径与提示文字 | [scenarios/custom-items.md](scenarios/custom-items.md) |
 | 设计模块/节点、效果槽、邻接运算与工作成长 | [scenarios/module-node-effects.md](scenarios/module-node-effects.md) |
@@ -24,6 +33,7 @@ description: 在已准备的 Probably Stolen 游戏环境中创建、维护或�
 | 添加自定义开局和初始物品/资金/状态 | [scenarios/custom-starts.md](scenarios/custom-starts.md) |
 | 修改游戏规则、数值、资格或判定结果 | [scenarios/gameplay-rules.md](scenarios/gameplay-rules.md) |
 | 调整网络升级、商店服务、前置条件与解锁副作用 | [scenarios/shop-progression.md](scenarios/shop-progression.md) |
+| 添加 Nico 工坊标签、进度图、条件、解锁或一次性领奖 | [scenarios/workshop-progression.md](scenarios/workshop-progression.md) |
 | 拖放交互、物品或机器升级、材料消耗 | [scenarios/item-interactions.md](scenarios/item-interactions.md) |
 | 库存整理/移动、客户交易、商店补货 | [scenarios/inventory-and-trade.md](scenarios/inventory-and-trade.md) |
 | 自定义机器、配方、加工和夜间结算 | [scenarios/machines-and-recipes.md](scenarios/machines-and-recipes.md) |
@@ -33,12 +43,13 @@ description: 在已准备的 Probably Stolen 游戏环境中创建、维护或�
 | 游戏内 Mod 管理、热键冲突与偏好文件修复 | [scenarios/mod-management.md](scenarios/mod-management.md) |
 | 注册声音、播放提示音或背景音乐 | [scenarios/audio.md](scenarios/audio.md) |
 | 对接其他扩展的可选 API | [scenarios/optional-extensions.md](scenarios/optional-extensions.md) |
+| 统一构建、打包、安装核对、日志诊断和分阶段验收 | [scenarios/build-and-verification.md](scenarios/build-and-verification.md) |
 
 ## 确认环境与接口
 
 1. 阅读项目约定、构建配置、依赖声明和当前工作区改动，保持既有目标框架、加载方式与发布结构。确认准备好的游戏构建、MelonLoader 或游戏内置 ModLoader 的实际加载路径、日志位置和 Mod 产物；不要沿用旧版本的类型或方法签名。
 2. 从当前构建可用的托管类型和框架程序集查找目标对象。核对声明类型、可见性、重载、参数与返回类型、调用方及调用时机；涉及 IL2CPP 包装对象时，同时核对对象生命周期和可用的托管访问方式。仅按方法名或参数个数找到的成员不能视为已确认。
-3. 将需求分为内容注册、现有规则调整、界面展示或输入、跨天行为、存档状态等，再追踪原游戏相关调用链与已有 Mod 扩展接口。优先使用公开回调、目录工厂、注册表和游戏自带的校验/交易方法；它们无法覆盖需求时才添加窄范围 Harmony 补丁。反射也应匹配完整签名并在目标缺失时明确停用相应功能。
+3. 将需求分为内容注册、现有规则调整、界面展示或输入、跨天行为、存档状态等，再追踪原游戏相关调用链与已有 Mod 扩展接口。优先使用项目已有的公共 API、公开回调、目录工厂、注册表和游戏自带的校验/交易方法；它们无法覆盖需求时才添加窄范围 Harmony 补丁。Forge 的声明提交与原生目录应用有不同的时机，不套用直接写目录的流程。反射也应匹配完整签名并在目标缺失时明确停用相应功能。
 4. 直接读取 IL2CPP 原生地址或字段偏移只能作最后选择：先记录托管接口为何不足，将访问集中封装，用构建标识和完整签名共同限制启用范围，并把升级风险及运行验证列入交付说明。不要把某一构建的地址、偏移或枚举数字当作通用接口。构建或签名不匹配时停用相关能力，不能继续尝试写入。
 
 ## 补丁与生命周期
@@ -61,7 +72,7 @@ description: 在已准备的 Probably Stolen 游戏环境中创建、维护或�
 
 - 等待目标界面层级出现后注入控件；菜单再次打开时检查已有实例，关闭或切换场景时释放旧引用。名称查找、布局尺寸、图片和本地化键都应在当前构建验证。对于只读展示，缓存或节流计算，并在输入数据变化时刷新。
 - 热键只在相关界面或玩法状态、游戏窗口有焦点时生效；一次性动作使用按下沿。覆盖层只在自身接管输入时阻止游戏输入。拖放操作须在游戏完成自身拖动步骤的合适时点识别最终来源和目标，并防止同次动作从多个回调重复写入。
-- 给设置提供安全默认值和边界检查；确有需要延续的旧键时迁移有效取值，仅是过期分类且无须保留取值时可重新初始化。自定义数据文件要校验结构、ID、范围和相互引用；错误条目给出定位信息及明确回退，不静默采用半成品。使用游戏或项目已有的本地化路径，缺键时提供可读回退。
+- 数值沿用项目已有的 `BuildConfig`、运行时配置或周目快照路径，先确认覆盖顺序；不为一次默认值调整另建设置菜单或数据文件。给设置提供安全默认值和边界检查，迁移时保留有效旧值。自定义数据文件校验结构、ID、范围和相互引用；错误条目给出定位信息及明确回退。细则见 [配置与本地化](scenarios/config-and-localization.md)。
 
 ## 存档与兼容
 
@@ -71,7 +82,6 @@ description: 在已准备的 Probably Stolen 游戏环境中创建、维护或�
 
 ## 构建与验证
 
-1. 用当前项目的构建方式和已确认的托管引用编译，解决签名错误时重新检查目标构建。只打包预期产物、资源与声明的依赖；安装前后核对产物及配套依赖的版本或哈希，再从新进程日志确认加载的是这组文件。
-2. 查看实际加载器日志，确认加载顺序、依赖、内容注册以及各必需和可选钩子的安装情况；MelonLoader 插件还要核对补丁所有者。对失败给出目标、上下文和清理结果；不要把“未报错”当成有效性证明。
-3. 在游戏内走通用户要求的路径，并检查至少一个相关边界或失败场景。对内容检查注册和实际生成；对界面检查打开、关闭与输入；对交易检查扣除和落点；对持久状态使用可丢弃存档检查保存、重载、换槽和必要的迁移。查看日志中重复注册、异常和冲突信息。
-4. 汇报类型/签名核对、编译、加载日志、游戏内行为各自的结果。若缺少可运行环境或安全测试存档，明确哪些效果尚未实测；静态可见的风险按具体控制流说明，对只能靠运行观察的结果保持待验证表述。
+按 [构建与生效排查](scenarios/build-and-verification.md) 选择与改动相关的检查及项目构建入口。依赖 Forge 时对同一份框架产物构建调用者，公共 API 改动还要同步调用点、依赖和打包入口。
+
+交付说明具体改动、已完成的检查与剩余验收项。已有运行证据要注明对应构建、产物和进程；缺少游戏内或保存重载证据时保留待验证表述。文档结构检查只证明技能文件可用，领域检查和编译也各有自己的验证范围。

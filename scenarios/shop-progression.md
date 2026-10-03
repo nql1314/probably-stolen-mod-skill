@@ -2,6 +2,8 @@
 
 适用：调整 Wilds Network 升级的前置、费用、重复购买与冷却，或让商店服务解锁、启用、改变费用。先分清“展示为可购买”“完成付款”“升级生效”和“读档后仍生效”，这些可能属于不同调用链。
 
+已有框架升级 API 时先核对当前公共契约与原生对象所有权，避免覆盖其它扩展同 ID 的解锁动作。Nico 工坊的独立标签与领奖回调使用 [工坊进度](workshop-progression.md)，不能把两套 UI 的状态混为同一购买结果。
+
 ## 核对当前对象
 
 - `NetworkUpgrade` 提供 `GetUpgradeById`、`IsReady`、`IsHavePrerequisite`、`GetMissingPrerequisite`、`GetCost`、`IsUnlocked`、`Unlock` 与 `IsLockedInDemo`。对象还有 `prerequisite`、`isRepeatable`、`cooldownCurrent` / `cooldownDuration`、`state` 等持久字段。
