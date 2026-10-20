@@ -16,7 +16,15 @@
 | 名称、效果说明及来源行 | `ForgePresentationApi`；仅作用于所属且已应用的物品，见 [物品](custom-items.md) |
 | 工坊独立进度链 | `ForgeWorkshopApi.RegisterChain`；展示快照与执行回调分开，见 [工坊](workshop-progression.md) |
 | 开局身份和周目数据 | `ForgeStartApi`、`ForgeRunDataApi`；身份认领、内存暂存与实际保存分开，见 [开局](custom-starts.md)、[存档](save-state.md) |
-| 库存观察与搬运预检 | `ForgeInventoryApi` 和 `ForgeCapabilities.Current.InventoryTransfer`；预检不代表写入能力，见 [库存](inventory-and-trade.md) |
+| 已有周目另存新槽 | `ForgeRunForkApi.RegisterState / IsForking`；纯身份转换、会话重绑与保存回读，见 [存档](save-state.md) |
+| 库存观察与放置预检 | `ForgeInventoryApi`、`ForgeInventoryPlacementApi`；快照和预检不预留、不提交，见 [库存](inventory-and-trade.md) |
+| 单件搬运与倒液 | `ForgeItemTransferApi.Move`、`ForgeLiquidTransferApi.Pour`；实际转移量、不确定结果和各自适配条件 |
+| 隐藏库存与完整物品图 | `ForgeInventoryEndpointApi`、`ForgeSaveGraphApi`、`ForgeListInventoryApi`；固定拓扑、完整特征和真实容量 |
+| 准入、临时锁与业务事务 | `ForgeInventoryAdmissionApi`、`ForgeInventoryFreezeApi`、`ForgeRunPurchaseApi`、`IForgeBatchTransaction`；各自限定的所有权与补偿范围 |
+| 多源供电与耗电设备 | `ForgeExternalPowerApi`、`ForgePowerApi`、`IForgePowerTransaction`；真实收据、拒绝与补偿，见 [机器](machines-and-recipes.md) |
+| 配方手册与自动化目录 | `GuideSnapshot`、`ForgeRecipeGuideApi`、`ForgeMachineAutomationApi`；只读声明，不增加加工次数 |
+| 对话、来访、电话与供应商 | `ForgeDialogueApi`、`ForgeClientVisitApi`、`ForgePhoneApi`、`ForgeSupplierApi`；见 [角色](custom-characters.md) |
+| 图像、阅读、物品检查与存档回读 | `ForgeAssetsApi`、`ForgeReadingApi`、`ForgeItemInspectionApi`、`ForgeSaveReadbackApi`；按本次用途读对应契约 |
 
 ## 分工与注册时机
 
@@ -30,8 +38,10 @@
 
 ## 能力与验收边界
 
-动作前检查对应的 `ForgeCapabilities.Current`、目录快照和运行适配状态，只停用依赖失败能力的功能。核对实际安装产物，不能从开发目录的新 API 推断游戏已具备该能力。
+动作前检查对应的 `ForgeCapabilities.Current`、目录快照和具体 API 的可用状态，只停用依赖失败能力的功能。优先按所用 API 查询实际门控，不假设总能力等同于每个窄接口。核对实际安装产物，不能从开发目录的新 API 推断游戏已具备该能力；接口表只是查找入口，不承诺所有构建均可用。
 
-如果当前 `InventoryTransfer` 未开放，就将物流或自动搬运停在声明、观察与预检范围；实现真实搬运还需独立完成接纳、写后读回、失败恢复和保存重载。`ForgeRunDataApi.Stage` 只暂存所属数据，不证明文件已经保存。工坊的资源条件和奖励只供展示，实际交易由内容回调完成。
+`InventoryTransfer` 总能力仍可能为 false，但当前有独立的单件 `Move` 和倒液 `Pour` 契约。按具体接口核对数量、`Indeterminate` 与恢复状态；不能将它们串起来宣称跨库存整体原子事务。确实只有观察/预检能力的环境才停在计划阶段。
+
+`ForgeRunDataApi.Stage` 只比较后暂存所属 JSON，不是保存或跨物品事务；`ForgeStartApi` 认领身份也不生成完整开局。工坊条件和奖励声明只供展示，内容方负责交易及收据。涉及运行中业务状态参与机器批次时使用现有事务接入，不把先 `Stage`、后 `Move` 当作共同提交。
 
 检查覆盖 owner/ID 冲突、注册时机、逐项应用和依赖缺失；有原生执行请求时再检查实例创建、玩法资源变化与重载。框架公共 API 变更按 [统一构建](build-and-verification.md) 更新所有调用者。

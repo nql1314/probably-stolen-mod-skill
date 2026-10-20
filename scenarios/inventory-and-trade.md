@@ -4,15 +4,27 @@
 
 ## 库存移动
 
-使用 Forge 时，先核对当前 `ForgeInventoryApi` 的观察/预检契约和 `ForgeCapabilities.Current.InventoryTransfer`。未开放实际写入时，不能把物流规则、资源网络或成功预检描述成已经可以自动搬运；见 [Forge 接入](forge-integration.md)。
+使用 Forge 时，`ForgeInventoryApi` / `ForgeInventoryPlacementApi` 提供观察与落点预检；单件固体搬运用 `ForgeItemTransferApi.Move`，液体用 `ForgeLiquidTransferApi.Pour`。`InventoryTransfer` 总能力为 false 不能单独证明这些窄接口不可用；按所需适配器、签名和结果核对，见 [Forge 接入](forge-integration.md)。预检不预留库存，也不代表交付完成。
 
 若需求只是观察物品放入 Inventor 库存，先核对 `ModHook.OnPlaceInventorInventoryItemEarly/Late(Action<List<GameItem>>)` 的调用位置和传入列表；它不是所有库存移动的通用事件，不能据此判断任意容器已接纳。真正写入或交易仍按下述接纳结果核对。
 
 1. 确认源库存、物品稳定身份、玩家所有权、`MayRemove` 一类移除条件、目标容器规则、形状与空间。不要假定物品实例编号总为正数；以当前构建的身份规则判断。拒绝来源不明、目标不可保存或会导致非法嵌套的物品。
-2. 优先使用当前构建的原生单次接受方法，例如 `GraphUtils.TryAcceptOnce` 的对应重载；先核对它对部分接受、剩余量与所有权的语义。写后读回源/目标，区分完整移动、部分移动、复制、拒绝和恢复失败。
+2. 优先使用当前已有公共搬运接口；直接接入原生时核对 `GraphUtils.TryAcceptOnce` 等对应重载。确认部分接受、剩余量与所有权的语义，写后读回源/目标，区分完整移动、部分移动、复制、拒绝和恢复失败。原生回调抛异常时也可能已经完成附着，不能只看异常决定重试。
 3. 批量移动逐件执行并设上限；记录已成功项，遇到不可恢复的失败即停，不把整批报告为成功。拖放路径先处理一次性令牌，详见 [交互示例](item-interactions.md)。
 
-如果所依赖的扩展目前只提供库存快照和位置预检，就停在只读计划；不能把预检结果当作原生接纳，也不要绕过缺失的写入/回滚能力直接改库存。只有完成实例身份、提交、失败补偿及保存读回的闭环后才开放自动搬运。
+以 `Move.Moved` 或 `Pour.PartsMoved` 等实际结果推进剩余数量；`Indeterminate` 表示结果不能确认，停止这条搬运链并对账，不能自动再搬同一份货。多个来源逐次重查真实余量与落点，多次单件成功也不证明整批可以一起回滚。液体还需核对组分及比例价值，受限倒液不覆盖中途过滤转换。
+
+如果实际环境只提供快照和预检，就保留只读计划，不绕过缺失写入/恢复能力直接改库存。底层 `UncheckedAccept` / `Expel` 不是用户准入证明；恢复来源自己的物品与玩家正常插入是不同路径，前者也必须验证原位置与身份。
+
+## 隐藏库存与完整物品图
+
+需要原生保存图外的根时用 `ForgeInventoryEndpointApi`；已在普通可见库存中的物品不能再次登记。工厂在原生 Decode 配对子物品前恢复稳定库存 ID、尺寸与拓扑。已有图损坏、工厂缺失或身份冲突时停止恢复并保留数据，不能替换成空库存。
+
+`OpenForCreation` 的 `Created` 只说明本次新建的根；借用已有根不能在失败后删除。回滚创建前先撤销本次放入的内容，再由凭据核对身份并删除本次空根；`Stage` 或一次 `Move` 不能替代制造唯一额度、完整升级与保存的共同事务。
+
+`ForgeSaveGraphApi` 编解码需要核对 UID、嵌套子图和原生独立特征，后者可能承载真实条件与价值，不能仅检查 ID/数量或状态 JSON。`ForgeListInventoryApi` 的后台网格只是承载；容量按玩法规定的真实件数及嵌套内容计算，UI 使用分页列表，不让玩家整理承载网格。
+
+准入附加规则用 `ForgeInventoryAdmissionApi`，只能收紧所属库存的原生成功判定；临时冻结用 `ForgeInventoryFreezeApi` 并释放 lease。隐藏图若已加入原生全物品枚举，机器自然参加原夜结，不再手动追加相同生产。
 
 ## 整理网格
 

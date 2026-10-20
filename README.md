@@ -1,15 +1,17 @@
 # Probably Stolen Mod Skill
 
-供 Codex 设计、评审、开发和排查 **Probably Stolen** 内容 Mod 使用的 Skill。它整理游戏接口、加载时机、Harmony 补丁、内容注册、界面、存档与兼容性检查，适用于 MelonLoader 插件、基于 Nicokobo Forge 的内容 Mod 和游戏内置 ModLoader 内容包。
+供 Codex 设计、评审、开发、适配游戏更新和排查 **Probably Stolen** 内容 Mod 使用的 Skill。它整理当前游戏接口、加载时机、Harmony 补丁、内容注册、界面、资源事务和存档，适用于 MelonLoader 插件、基于 Nicokobo Forge 的内容 Mod 和游戏内置 ModLoader 内容包。
 
 这是开发指导，不是可以放进游戏 `Mods` 目录直接运行的 Mod。具体类型签名和行为须以当前游戏构建、框架契约与安装产物为准；接口检查、编译、安装、加载、玩法和保存重载分别记录。百科内容写作使用 Wiki Skill，框架本身的改造使用 `nicokobo-forge`。
 
 ## 仓库内容
 
 - [SKILL.md](SKILL.md)：Skill 入口，说明适用范围、开发与验证流程，并按需求指向场景指南。
-- [scenarios/](scenarios/)：按任务查阅；除物品、机器、开局、UI、事件与存档等场景，也包含 [Forge 接入](scenarios/forge-integration.md)、[工坊进度](scenarios/workshop-progression.md) 和 [构建与生效排查](scenarios/build-and-verification.md)。只读取本次需要的指南。
+- [scenarios/](scenarios/)：按任务查阅，包含 [设计与可行性](scenarios/design-and-feasibility.md)、[游戏版本升级](scenarios/game-updates.md)、[Forge 接入](scenarios/forge-integration.md)、[价值与真实条件](scenarios/item-value-and-conditions.md)、[水产与活体](scenarios/aquaculture-and-living-items.md)，以及物品、机器、UI、开局、存档和 [构建与生效排查](scenarios/build-and-verification.md)。只读取本次需要的指南。
 
-一般开发执行适当的离线检查；场景中的原生验收项不自动启动游戏。用户明确要求执行原生测试时，才读取并使用当前环境的 `probably-stolen-native-test` 技能；仅讨论测试或整理技能不触发。规则见 [原生测试触发规则](scenarios/build-and-verification.md#原生测试触发规则)。
+本轮于 2026-10-20 按本机 Demo Steam Build `26017150`、当前 Forge 公共契约和实际接入经验维护。构建标识与证据范围集中在 [版本升级指南](scenarios/game-updates.md#本轮维护基线)；后续使用仍核对目标环境，不把本日期当作永久兼容保证。
+
+普通代码修改默认执行必要的已有检查并编译相关项目；打包、安装和游戏内执行分别按请求处理。总构建脚本可能默认安装，调用前检查实际参数。场景中的原生验收项不自动启动游戏；用户明确要求执行原生测试时，才读取并使用当前环境的 `probably-stolen-native-test` 技能；仅讨论测试或整理技能不触发。规则见 [原生测试触发规则](scenarios/build-and-verification.md#原生测试触发规则)。
 
 ## 接入 Codex
 
