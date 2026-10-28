@@ -9,46 +9,26 @@ description: 为 Probably Stolen 内容 Mod 做玩法设计、可行性评审、
 
 ## 先确定本次工作
 
-- 设计或可行性评审：读 [设计与可行性](scenarios/design-and-feasibility.md)，先核对原生经营循环、现有内容和接口，再确定首版选择、经济规则与失败路径。保留用户给定的名称、ID、中文措辞和玩法规则；规划请求只交付相应方案。
-- 游戏更新或旧 Mod 适配：读 [版本升级](scenarios/game-updates.md)，核对安装构建、互操作程序集和受影响调用链；不把改一个版本常量当作适配完成。
-- 开发或修复：先读工作区约定、相关设计和现有实现，保留未提交改动。用户最新修正优先于旧计划；同步实际计算、声明、检查、文案和发布文档，清理已经被替代的规则。
-- Forge 接入：读取 [Forge 接入](scenarios/forge-integration.md)，复用已有公共 API。需要改框架本身时再使用当前环境的 `nicokobo-forge` 技能或框架仓库约定；内容 Mod 持有具体玩法、配方与资源。
-- “没生效”或运行异常：先按 [构建与生效排查](scenarios/build-and-verification.md) 确认当前产物和故障发生的阶段，再读对应场景；已有日志只证明记录中的进程与产物。
-- 普通开发、修复、编译和一般测试不自动启动游戏或调用原生测试技能。各场景的“验证”列出验收路径，实际执行范围由本次请求决定；用户明确要求执行原生测试时按 [原生测试触发规则](scenarios/build-and-verification.md#原生测试触发规则) 处理。
+- 设计或可行性评审：读 [内容设计与注册](references/content-and-registration.md)，核对原生经营循环、现有内容和公开能力，再确定首版经济规则与失败路径。保留用户给定名称、ID、中文措辞和玩法规则；规划请求不顺带实施。
+- 开发或修复：先读工作区约定、相关设计与实际实现，保留未提交改动。用户最新修正优先于旧计划；同步计算、声明、检查和文案。
+- 游戏更新或“没生效”：读 [验证与优化](references/verification-and-optimization.md)，先定位构建、产物、加载、安装、触发还是数据阶段，再选择相关场景。
+- Forge 内容接入：读 [内容设计与注册](references/content-and-registration.md)，使用实际安装版本的公共契约；框架本身改造使用当前环境的 `nicokobo-forge` 技能或框架仓库约定。
+- 多 Mod 实现研究、分批分析与比较入库：读取独立的 [研究方法 Skill](methods/probably-stolen-mod-research/SKILL.md)，先明确本批纳入/排除范围，再分开事实提取、复核与指导编写。
+- 普通开发、修复、编译、文档整理不自动启动游戏。只有明确执行原生测试的请求才按 [原生测试触发规则](references/verification-and-optimization.md#原生测试触发规则) 处理。
 
-## 按需求读取场景指南
+## 按需求读取指南
 
-`scenarios/` 按需求整理可复用的实现路径，不是可直接套用到任意游戏构建的成品。先读取相关场景；需求跨场景时只组合实际需要的指南，再按下文核对当前构建的签名、生命周期与运行效果。文中的技术入口是候选点，不能代替本次构建的接口检查。
+只组合本次需要的文件。下列路径描述实现决策，具体类型、签名、状态字段与能力仍需核对目标构建；伪代码和历史版本常量不视为稳定API。
 
 | 需求 | 读取 |
 | --- | --- |
-| 设计新 Mod、评审方案、核对原生能力与已有内容重叠 | [scenarios/design-and-feasibility.md](scenarios/design-and-feasibility.md) |
-| 游戏更新、签名变化、旧指南与当前构建不一致 | [scenarios/game-updates.md](scenarios/game-updates.md) |
-| 接入 Forge 注册、生命周期与公共能力，处理框架和内容侧分工 | [scenarios/forge-integration.md](scenarios/forge-integration.md) |
-| 新增开局 Perk、调整点数/数量、互斥、图标和不同效果 | [scenarios/starting-perks.md](scenarios/starting-perks.md) |
-| 添加食物、模块、容器、机器等物品，处理获得途径与提示文字 | [scenarios/custom-items.md](scenarios/custom-items.md) |
-| 设计模块/节点、效果槽、邻接运算与工作成长 | [scenarios/module-node-effects.md](scenarios/module-node-effects.md) |
-| 调整拾荒、垃圾堆和奖励的掉落表或权重 | [scenarios/loot-tables.md](scenarios/loot-tables.md) |
-| 导入图像、创建 Sprite、替换物品或角色图像，处理物品占格与图标缩放/对齐 | [scenarios/sprites-and-icons.md](scenarios/sprites-and-icons.md) |
-| 绘制独立监控窗、工具面板或调试界面 | [scenarios/ui-overlay.md](scenarios/ui-overlay.md) |
-| 向现有界面插入图标、按钮、列表或滚动区域 | [scenarios/ui-injection.md](scenarios/ui-injection.md) |
-| 添加访客/商人角色、肖像、库存和到访日程 | [scenarios/custom-characters.md](scenarios/custom-characters.md) |
-| 添加自定义开局和初始物品/资金/状态 | [scenarios/custom-starts.md](scenarios/custom-starts.md) |
-| 修改游戏规则、数值、资格或判定结果 | [scenarios/gameplay-rules.md](scenarios/gameplay-rules.md) |
-| 生产定价、纯度、真实/伪装条件、物品用途类别与消费效果 | [scenarios/item-value-and-conditions.md](scenarios/item-value-and-conditions.md) |
-| 调整网络升级、商店服务、前置条件与解锁副作用 | [scenarios/shop-progression.md](scenarios/shop-progression.md) |
-| 添加 Nico 工坊标签、进度图、条件、解锁或一次性领奖 | [scenarios/workshop-progression.md](scenarios/workshop-progression.md) |
-| 拖放交互、物品或机器升级、材料消耗 | [scenarios/item-interactions.md](scenarios/item-interactions.md) |
-| 库存整理/移动、客户交易、商店补货 | [scenarios/inventory-and-trade.md](scenarios/inventory-and-trade.md) |
-| 自定义机器、配方、加工和夜间结算 | [scenarios/machines-and-recipes.md](scenarios/machines-and-recipes.md) |
-| 水产养殖、活体成长、饲料、过滤、繁殖、取卵与收获 | [scenarios/aquaculture-and-living-items.md](scenarios/aquaculture-and-living-items.md) |
-| 每日事件、日历标记、委托和进度触发 | [scenarios/day-events.md](scenarios/day-events.md) |
-| 物品状态、周目存档、外部数据与迁移 | [scenarios/save-state.md](scenarios/save-state.md) |
-| 偏好设置、数据文件与本地化 | [scenarios/config-and-localization.md](scenarios/config-and-localization.md) |
-| 游戏内 Mod 管理、热键冲突与偏好文件修复 | [scenarios/mod-management.md](scenarios/mod-management.md) |
-| 注册声音、播放提示音或背景音乐 | [scenarios/audio.md](scenarios/audio.md) |
-| 对接其他扩展的可选 API | [scenarios/optional-extensions.md](scenarios/optional-extensions.md) |
-| 统一构建、打包、安装核对、日志诊断和分阶段验收 | [scenarios/build-and-verification.md](scenarios/build-and-verification.md) |
+| Perk/开局、物品、角色、掉落、模块/工坊、机器配方、跨日事件与活体生产 | [内容设计与注册](references/content-and-registration.md) |
+| 精确补丁、可选依赖、就绪门控、嵌套上下文、异常与恢复 | [补丁与生命周期](references/patches-and-lifecycle.md) |
+| 覆盖层、原生UI注入、热键、输入焦点、脏队列、缓存与分帧调度 | [UI与刷新](references/ui-and-refresh.md) |
+| 拖放/组拖、库存移动、交易、升级、支付、材料消耗、奖励与批量整理 | [库存与事务](references/inventory-and-transactions.md) |
+| 周目/槽位、一次性进度、订单、外部文件、迁移、回档与另存 | [状态与存档](references/state-and-saves.md) |
+| 偏好/配置修复、本地化、图片/图标/立绘、声音与资源释放 | [配置与资源](references/config-and-resources.md) |
+| 构建/加载诊断、游戏更新、测试范围、优化排序和效果证据 | [验证与优化](references/verification-and-optimization.md) |
 
 ## 确认环境与接口
 
@@ -71,23 +51,23 @@ description: 为 Probably Stolen 内容 Mod 做玩法设计、可行性评审、
 - 对声明式注册分别核对声明接收、目录应用、工厂创建和玩法效果。整组提交只保证声明阶段的冲突处理，不自动保证每项都已进入游戏目录；以当前运行时的能力状态和逐项应用结果决定是否开放玩法。
 - 在相应目录就绪后通过当前游戏工厂或模板创建对象。核对生成物的 ID、形状、标签、图像、价格、容器槽和目标目录；复制模板时避免共享可变状态。原有存档中的同类物品是否要迁移，应与新建物品分别处理。
 - 概率、倍率、价格、容量、尺寸、时间和液体数量都要明确单位、上下界与溢出行为。配置值必须进入实际计算路径；不要把无效的设置展示成可调选项。调用游戏规则辅助方法时核对它在目标构建中的语义。
-- 将原生用途类别、真实条件、伪装/鉴定状态和价值阶段分别处理；名称或 Tooltip 不能证明实际效果。生产基础价值与纯度、市场售价不可混用，见 [价值与条件](scenarios/item-value-and-conditions.md)。
+- 将原生用途类别、真实条件、伪装/鉴定状态和价值阶段分别处理；名称或 Tooltip 不能证明实际效果。生产基础价值与纯度、市场售价不可混用，见 [价值与条件](references/inventory-and-transactions.md)。
 - 涉及支付、材料消耗、库存移动或奖励交付，先检查资格、余额、所有权、空间及游戏自带的接纳条件，再执行写入；逐步核对返回值和写后状态。多步写入须先设计预留、回滚或可追踪的补偿，全部结果确认后才报告完成；回滚失败也要保留明确状态。跨多次回调的待交付余量应持久化并幂等重试。
 
 ## 界面、输入与配置
 
 - 等待目标界面层级出现后注入控件；菜单再次打开时检查已有实例，关闭或切换场景时释放旧引用。名称查找、布局尺寸、图片和本地化键都应在当前构建验证。对于只读展示，缓存或节流计算，并在输入数据变化时刷新。
-- 热键只在相关界面或玩法状态、游戏窗口有焦点且文本框/输入法未接管时生效；一次性动作使用按下沿。Unity 对象的托管包装可能在原生销毁后仍存在，调用组件前用 Unity 空值语义判断，不能只靠 `?.`。覆盖层按自身输入范围接管；拖放按最终来源和目标去重，细则见 UI 与交互场景。
-- 数值沿用项目已有的 `BuildConfig`、运行时配置或周目快照路径，先确认覆盖顺序；不为一次默认值调整另建设置菜单或数据文件。给设置提供安全默认值和边界检查，迁移时保留有效旧值。自定义数据文件校验结构、ID、范围和相互引用；错误条目给出定位信息及明确回退。细则见 [配置与本地化](scenarios/config-and-localization.md)。
+- 热键只在相关界面或玩法状态、游戏窗口有焦点且文本框/输入法未接管时生效；一次性动作使用按下沿。Unity 对象的托管包装可能在原生销毁后仍存在，调用组件前用 Unity 空值语义判断，不能只靠 `?.`。覆盖层按自身输入范围接管；拖放按最终来源和目标去重，细则见 [UI与刷新](references/ui-and-refresh.md) 与 [库存与事务](references/inventory-and-transactions.md)。
+- 数值沿用项目已有的 `BuildConfig`、运行时配置或周目快照路径，先确认覆盖顺序；不为一次默认值调整另建设置菜单或数据文件。给设置提供安全默认值和边界检查，迁移时保留有效旧值。自定义数据文件校验结构、ID、范围和相互引用；错误条目给出定位信息及明确回退。细则见 [配置与本地化](references/config-and-resources.md)。
 
 ## 存档与兼容
 
-- 与周目绑定的数据优先使用游戏支持的存档扩展点；物品自身状态可放在可保存的物品字段或标签中。区分原生 run/slot 寻址身份与逻辑周目身份；新局、普通读档、旧周目另存新槽走不同路径，见 [存档](scenarios/save-state.md)。格式迁移不能把未知版本、身份失配或损坏状态当成空白新局。
+- 与周目绑定的数据优先使用游戏支持的存档扩展点；物品自身状态可放在可保存的物品字段或标签中。区分原生 run/slot 寻址身份与逻辑周目身份；新局、普通读档、旧周目另存新槽走不同路径，见 [存档](references/state-and-saves.md)。格式迁移不能把未知版本、身份失配或损坏状态当成空白新局。
 - 必须使用独立文件时，按项目约定的用户数据位置保存，将记录关联正确存档槽与周目；先验证新内容再替换旧内容，并准备读取失败时的处理。游戏存档与外部文件不是同一事务，需设计保存顺序、崩溃恢复和重复执行。备份应在确认保存完成后运行，并按存档槽区分、设置有限保留量。
 - 与其它 Mod 共用方法、目录、热键或 ID 时，检查补丁顺序及所有者，避免无条件清理全局数据或覆盖其它扩展的结果。可选依赖应探测版本与实际接口，不可用时只关闭相关能力。循环更新要以事件为主；必要的轮询需限制频率、扫描范围和资源创建。组合搜索、批量整理等计算要限制步数、内存和单帧耗时，超限时保留原状态；跨帧方案提交前须复核输入未变化。异常不能被空捕获长期隐藏。
 
 ## 构建与验证
 
-按 [构建与生效排查](scenarios/build-and-verification.md) 选择与改动相关的已有检查。普通代码修改默认以相关项目编译通过为完成条件；打包、安装和游戏内执行按本次请求分别处理，先检查脚本默认副作用。依赖 Forge 时对同一份框架产物构建调用者；公共 API 改动同步调用点、依赖和发布入口。常规修改不创建备份、哈希清单或额外报告。
+按 [构建与生效排查](references/verification-and-optimization.md) 选择与改动相关的已有检查。普通代码修改默认以相关项目编译通过为完成条件；打包、安装和游戏内执行按本次请求分别处理，先检查脚本默认副作用。依赖 Forge 时对同一份框架产物构建调用者；公共 API 改动同步调用点、依赖和发布入口。常规修改不创建备份、哈希清单或额外报告。
 
 交付说明具体改动、已完成的检查与剩余验收项。已有运行证据要注明对应构建、产物和进程；缺少游戏内或保存重载证据时保留待验证表述。文档结构检查只证明技能文件可用，领域检查和编译也各有自己的验证范围。

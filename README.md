@@ -7,15 +7,16 @@
 ## 仓库内容
 
 - [SKILL.md](SKILL.md)：Skill 入口，说明适用范围、开发与验证流程，并按需求指向场景指南。
-- [scenarios/](scenarios/)：按任务查阅，包含 [设计与可行性](scenarios/design-and-feasibility.md)、[游戏版本升级](scenarios/game-updates.md)、[Forge 接入](scenarios/forge-integration.md)、[价值与真实条件](scenarios/item-value-and-conditions.md)、[水产与活体](scenarios/aquaculture-and-living-items.md)，以及物品、机器、UI、开局、存档和 [构建与生效排查](scenarios/build-and-verification.md)。只读取本次需要的指南。
+- [Mod 实现研究方法](methods/probably-stolen-mod-research/SKILL.md)：独立的方法 Skill，供低成本模型逐个分析、高能力模型比较复核，再按场景整理到开发指南；附分批规则、证据模板和可复制的阶段提示词。研究与实际优化分开执行。
+- [references/](references/)：按需求查阅 [内容注册](references/content-and-registration.md)、[补丁与生命周期](references/patches-and-lifecycle.md)、[UI与刷新](references/ui-and-refresh.md)、[库存事务](references/inventory-and-transactions.md)、[状态存档](references/state-and-saves.md)、[配置资源](references/config-and-resources.md) 与 [验证优化](references/verification-and-optimization.md)。只加载相关主题。
 
-本轮于 2026-10-20 按本机 Demo Steam Build `26017150`、当前 Forge 公共契约和实际接入经验维护。构建标识与证据范围集中在 [版本升级指南](scenarios/game-updates.md#本轮维护基线)；后续使用仍核对目标环境，不把本日期当作永久兼容保证。
+指南提供可复用的实现决策与边界，不是固定游戏版本的接口清单。每次任务仍需核对目标构建、加载器和公共契约；静态链条、实际加载、玩法效果与保存重载各有自己的验证范围。
 
-普通代码修改默认执行必要的已有检查并编译相关项目；打包、安装和游戏内执行分别按请求处理。总构建脚本可能默认安装，调用前检查实际参数。场景中的原生验收项不自动启动游戏；用户明确要求执行原生测试时，才读取并使用当前环境的 `probably-stolen-native-test` 技能；仅讨论测试或整理技能不触发。规则见 [原生测试触发规则](scenarios/build-and-verification.md#原生测试触发规则)。
+普通代码修改默认执行必要的已有检查并编译相关项目；打包、安装和游戏内执行分别按请求处理。总构建脚本可能默认安装，调用前检查实际参数。场景中的原生验收项不自动启动游戏；用户明确要求执行原生测试时，才读取并使用当前环境的 `probably-stolen-native-test` 技能；仅讨论测试或整理技能不触发。规则见 [原生测试触发规则](references/verification-and-optimization.md#原生测试触发规则)。
 
 ## 接入 Codex
 
-将包含 `SKILL.md` 的目录放入 `$CODEX_HOME/skills/probably-stolen-mod-skill`；未设置 `CODEX_HOME` 时，默认位置为用户目录下的 `.codex/skills/probably-stolen-mod-skill`。请保留 `SKILL.md` 与 `scenarios/` 的相对位置。
+将包含 `SKILL.md` 的目录放入 `$CODEX_HOME/skills/probably-stolen-mod-skill`；未设置 `CODEX_HOME` 时，默认位置为用户目录下的 `.codex/skills/probably-stolen-mod-skill`。请保留 `SKILL.md`、`references/` 与 `methods/` 的相对位置。
 
 在 **Windows PowerShell** 中，从本仓库根目录运行以下命令可建立目录联接。这样修改仓库文件后无需再次复制：
 
@@ -25,7 +26,7 @@ New-Item -ItemType Directory -Force -Path $skillsDir | Out-Null
 New-Item -ItemType Junction -Path (Join-Path $skillsDir 'probably-stolen-mod-skill') -Target (Get-Location).Path
 ```
 
-如果目标路径已有同名目录，先检查现有接入方式，再更新它；上面的命令不会覆盖现有目录。不使用目录联接时，也可以在目标目录中复制 `SKILL.md` 和整个 `scenarios/`，仓库更新后需重新同步。
+如果目标路径已有同名目录，先检查现有接入方式，再更新它；上面的命令不会覆盖现有目录。不使用目录联接时，也可以在目标目录中复制 `SKILL.md`、整个 `references/` 和 `methods/`，仓库更新后需重新同步。
 
 接入后开启一个新的 Codex 任务，明确调用，例如：
 
