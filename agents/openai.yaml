@@ -1,0 +1,4 @@
+interface:
+  display_name: "Probably Stolen 正式版 Mod"
+  short_description: "依据官方中文指南开发、迁移正式版 Mod，处理内容、UI 与 Steam 工坊发布"
+  default_prompt: "使用 $probably-stolen-official-mods，按官方中文指南与当前游戏接口完成指定 Mod 的开发、迁移或工坊发布，并在授权范围内验证。"

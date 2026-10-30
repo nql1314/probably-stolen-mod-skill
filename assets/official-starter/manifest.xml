@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Manifest>
+  <ID>nicokobo.official-starter</ID>
+  <Name>Nico Official Starter</Name>
+  <Author>Nico</Author>
+  <ModVersion>0.0.1</ModVersion>
+  <Description>Development template; logs lifecycle events only.</Description>
+  <!-- 发布前填写实际验证过的游戏内部版本；不要填 Steam Build。 -->
+  <GameVersions />
+  <Prerequisites />
+  <Assemblies>
+    <Assembly>Nicokobo.OfficialStarter.dll</Assembly>
+  </Assemblies>
+  <Capabilities />
+</Manifest>
